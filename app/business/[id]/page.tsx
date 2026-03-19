@@ -5,6 +5,16 @@ import { ReviewCard } from "../../../components/ReviewCard";
 import { ReviewFormSection } from "../../../components/ReviewFormSection";
 import { businesses, getReviewsForBusiness } from "../../../lib/mockData";
 
+const openingHours = [
+  { day: "Monday", time: "8:00 AM - 10:00 PM" },
+  { day: "Tuesday", time: "8:00 AM - 10:00 PM" },
+  { day: "Wednesday", time: "8:00 AM - 10:00 PM" },
+  { day: "Thursday", time: "8:00 AM - 10:00 PM" },
+  { day: "Friday", time: "8:00 AM - 11:00 PM" },
+  { day: "Saturday", time: "9:00 AM - 11:00 PM" },
+  { day: "Sunday", time: "9:00 AM - 9:00 PM" },
+];
+
 function RatingRow({
   label,
   value,
@@ -29,12 +39,15 @@ function RatingRow({
   );
 }
 
-export default function BusinessDetailsPage({
+export default async function BusinessDetailsPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }> | { id: string };
 }) {
-  const business = businesses.find((b) => b.id === params.id);
+  const resolvedParams = await Promise.resolve(params);
+  const routeId = decodeURIComponent(resolvedParams.id ?? "").trim();
+
+  const business = businesses.find((b) => b.id === routeId);
 
   if (!business) {
     return (
@@ -75,6 +88,45 @@ export default function BusinessDetailsPage({
 
         <BusinessDetailsHeader business={business} />
 
+        <section className="mt-6 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <h2 className="text-sm font-semibold text-zinc-950">Images gallery</h2>
+            <div className="text-xs text-zinc-600">{business.images.length} photos</div>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {business.images.map((src, idx) => (
+              <div key={src} className="overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100">
+                <img
+                  src={src}
+                  alt={`${business.name} image ${idx + 1}`}
+                  className="h-44 w-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-6 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <h2 className="text-sm font-semibold text-zinc-950">Timing</h2>
+            <div className="text-xs font-semibold text-zinc-700">
+              {business.isOpenNow ? "Open now" : "Closed"}
+            </div>
+          </div>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {openingHours.map((row) => (
+              <div
+                key={row.day}
+                className="flex items-center justify-between rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2"
+              >
+                <span className="text-sm font-medium text-zinc-700">{row.day}</span>
+                <span className="text-sm text-zinc-700">{row.time}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
         <div className="mt-6 grid gap-4 lg:grid-cols-3">
           <section className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm lg:col-span-1">
             <div className="flex items-start justify-between gap-3">
@@ -97,14 +149,20 @@ export default function BusinessDetailsPage({
               <RatingRow label="Value" value={business.averageBreakdown.value} />
             </div>
 
-            <button
-              type="button"
-              className="mt-5 inline-flex h-10 w-full items-center justify-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white hover:bg-blue-700"
-            >
-              <a href="#write-review" className="w-full">
-                Write a review
+            <div className="mt-5 grid gap-2">
+              <a
+                href="#write-review"
+                className="inline-flex h-10 w-full items-center justify-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white hover:bg-blue-700"
+              >
+                Write a review here
               </a>
-            </button>
+              <Link
+                href={`/business/${business.id}/review`}
+                className="inline-flex h-10 w-full items-center justify-center rounded-lg border border-zinc-200 bg-white px-4 text-sm font-medium text-zinc-800 hover:bg-zinc-50"
+              >
+                Add / Edit review page
+              </Link>
+            </div>
           </section>
 
           <section className="lg:col-span-2">

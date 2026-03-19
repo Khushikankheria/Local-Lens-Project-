@@ -27,6 +27,24 @@ export function Navbar() {
             Browse
           </Link>
           <Link
+            href="/businesses"
+            className="rounded-md px-3 py-1.5 text-sm font-medium text-zinc-700 hover:bg-zinc-100 hover:text-zinc-950"
+          >
+            Businesses
+          </Link>
+          <Link
+            href="/favorites"
+            className="rounded-md px-3 py-1.5 text-sm font-medium text-zinc-700 hover:bg-zinc-100 hover:text-zinc-950"
+          >
+            Favorites
+          </Link>
+          <Link
+            href="/profile"
+            className="rounded-md px-3 py-1.5 text-sm font-medium text-zinc-700 hover:bg-zinc-100 hover:text-zinc-950"
+          >
+            Profile
+          </Link>
+          <Link
             href="/admin"
             className="rounded-md px-3 py-1.5 text-sm font-medium text-zinc-700 hover:bg-zinc-100 hover:text-zinc-950"
           >

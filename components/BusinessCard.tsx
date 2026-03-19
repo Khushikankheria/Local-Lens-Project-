@@ -23,12 +23,12 @@ export function BusinessCard({ business }: { business: Business }) {
       </div>
 
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        <span className="rounded-md border border-zinc-200 bg-white px-2 py-1 text-xs font-medium text-zinc-700">
+        <span className="rounded-md border border-zinc-200 bg-white px-2 py-1 text-xs font-semibold text-zinc-700">
           {business.location}
         </span>
         <div className="flex items-center gap-2">
           <RatingStars value={business.averageRating} size="sm" />
-          <span className="text-xs text-zinc-600 tabular-nums">
+          <span className="text-xs font-semibold text-zinc-700 tabular-nums">
             {business.averageRating.toFixed(1)} ({business.ratingCount})
           </span>
         </div>

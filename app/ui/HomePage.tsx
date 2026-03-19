@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { BusinessCard } from "../../components/BusinessCard";
 import { SearchFilters, type SearchFiltersValue } from "../../components/SearchFilters";
@@ -24,6 +25,8 @@ export function HomePage() {
     query: "",
     category: "All",
     location: "All",
+    minRating: 0,
+    price: "All",
   });
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,6 +40,8 @@ export function HomePage() {
     return businesses.filter((b) => {
       if (filters.category !== "All" && b.category !== filters.category) return false;
       if (filters.location !== "All" && b.location !== filters.location) return false;
+      if (filters.minRating > 0 && b.averageRating < filters.minRating) return false;
+      if (filters.price !== "All" && b.priceLevel !== filters.price) return false;
       if (!q) return true;
       return (
         b.name.toLowerCase().includes(q) ||
@@ -45,6 +50,11 @@ export function HomePage() {
       );
     });
   }, [filters]);
+
+  const featured = useMemo(
+    () => businesses.slice().sort((a, b) => b.averageRating - a.averageRating).slice(0, 3),
+    []
+  );
 
   return (
     <main className="bg-zinc-50">
@@ -58,6 +68,17 @@ export function HomePage() {
               Browse nearby places, filter by category or location, and read real reviews
               from the community.
             </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {categories.map((c) => (
+                <Link
+                  key={c}
+                  href={`/categories/${encodeURIComponent(c.toLowerCase())}`}
+                  className="rounded-full border border-zinc-200 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-100"
+                >
+                  {c}
+                </Link>
+              ))}
+            </div>
           </div>
           <div className="mt-6">
             <SearchFilters
@@ -74,6 +95,22 @@ export function HomePage() {
         </section>
 
         <section className="mt-6">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-zinc-950">Featured / Top-rated</h2>
+            <Link
+              href="/businesses"
+              className="text-xs font-medium text-blue-700 hover:text-blue-800"
+            >
+              View all businesses
+            </Link>
+          </div>
+
+          <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {featured.map((b) => (
+              <BusinessCard key={`featured-${b.id}`} business={b} />
+            ))}
+          </div>
+
           <div className="mb-3 flex items-end justify-between gap-3">
             <h2 className="text-sm font-semibold text-zinc-950">Local businesses</h2>
             <div className="text-xs text-zinc-600 tabular-nums">
@@ -103,7 +140,7 @@ export function HomePage() {
               </p>
               <button
                 onClick={() =>
-                  setFilters({ query: "", category: "All", location: "All" })
+                  setFilters({ query: "", category: "All", location: "All", minRating: 0, price: "All" })
                 }
                 className="mt-4 inline-flex h-10 items-center justify-center rounded-lg bg-zinc-900 px-4 text-sm font-medium text-white hover:bg-zinc-800"
               >

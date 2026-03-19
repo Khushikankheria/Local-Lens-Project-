@@ -28,7 +28,7 @@ export function BusinessFormModal({
     () => ({
       name: initial?.name ?? "",
       category: (initial?.category ?? "Cafe") as BusinessCategory,
-      location: (initial?.location ?? "Downtown") as BusinessLocation,
+      location: (initial?.location ?? "Connaught Place") as BusinessLocation,
       shortDescription: initial?.shortDescription ?? "",
       addressLine: initial?.addressLine ?? "",
     }),
@@ -111,7 +111,14 @@ export function BusinessFormModal({
                 }
                 className="mt-1 h-10 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm text-zinc-950 outline-none ring-blue-500/30 focus:ring-2"
               >
-                {(["Downtown", "Uptown", "Riverside", "Midtown"] as const).map((l) => (
+                {([
+                  "Gurgaon",
+                  "Noida",
+                  "Connaught Place",
+                  "Saket",
+                  "Dwarka",
+                  "South Delhi",
+                ] as const).map((l) => (
                   <option key={l} value={l}>
                     {l}
                   </option>

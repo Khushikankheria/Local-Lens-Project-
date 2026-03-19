@@ -1,4 +1,5 @@
 import type { Business } from "../lib/types";
+import { FavoriteButton } from "./FavoriteButton";
 import { RatingStars } from "./RatingStars";
 
 export function BusinessDetailsHeader({
@@ -20,6 +21,18 @@ export function BusinessDetailsHeader({
             <span className="rounded-md border border-zinc-200 bg-white px-2 py-1 text-xs font-medium text-zinc-700">
               {business.location}
             </span>
+            <span className="rounded-md border border-zinc-200 bg-white px-2 py-1 text-xs font-medium text-zinc-700">
+              {business.priceLevel}
+            </span>
+            <span
+              className={`rounded-md px-2 py-1 text-xs font-semibold ${
+                business.isOpenNow
+                  ? "bg-emerald-100 text-emerald-700"
+                  : "bg-rose-100 text-rose-700"
+              }`}
+            >
+              {business.isOpenNow ? "Open now" : "Closed"}
+            </span>
           </div>
           <p className="mt-2 text-sm text-zinc-700">{business.shortDescription}</p>
           <p className="mt-1 text-sm text-zinc-500">{business.addressLine}</p>
@@ -32,6 +45,9 @@ export function BusinessDetailsHeader({
             <span className="text-xs text-zinc-600 tabular-nums">
               ({business.ratingCount})
             </span>
+          </div>
+          <div className="mt-3">
+            <FavoriteButton businessId={business.id} />
           </div>
         </div>
       </div>

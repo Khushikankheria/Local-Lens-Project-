@@ -46,10 +46,11 @@ export function AuthCard({ mode }: { mode: "login" | "signup" }) {
     try {
       if (mode === "login") {
         await login(email, password);
+        router.push("/admin");
       } else {
         await signup(email, password);
+        router.push(next);
       }
-      router.push(next);
     } catch (err) {
       setStatus("error");
       setError(err instanceof Error ? err.message : "Something went wrong.");
