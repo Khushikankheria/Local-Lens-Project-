@@ -1,7 +1,7 @@
+
 # LocalLens
 
-LocalLens is a Next.js app for discovering and reviewing local businesses.
-
+**LocalLens** is a crowdsourced review platform for local businesses. Users can browse businesses by category and location, submit reviews with quality/service/value ratings and optional photos, while admins approve reviews before they're published.
 It includes:
 - Business discovery with search and multi-filter support
 - Category and location based browsing
@@ -10,96 +10,31 @@ It includes:
 - Mock auth flow with role-based admin access
 - Admin dashboard for review moderation and content management
 
+# Contributors 
+
+**Ayushi Gupta** - Backend & Database<br>
+**Lakshika** - Backend <br>
+**Khushi Kankheria** - Frontend (User Dashboard & Admin Dashboard) <br>
+**Hemlata** - Added Image Feature   <br>
+**Divya Verma**- Implemented Animation<br>
+
+
+## Features
+
+**Browse Local Businesses** - Search, filter by category and location <br>
+**Crowdsourced Reviews** - Users submit reviews with ratings for quality, service, and value <br>
+**Photo Uploads** - Optional photo upload with reviews <br>
+**Admin Dashboard** - Review moderation before publishing <br>
+**Rating Breakdowns** - Overall and category-specific ratings <br>
+
+
 ## Tech Stack
 
-- Next.js 16 (App Router)
-- React 19
-- TypeScript
-- Tailwind CSS 4
-- ESLint 9
+- **Framework**: Next.js 16 
+- **Styling**: Tailwind CSS 4
+- **Database**: Supabase (PostgreSQL)
+- **Authentication**: Supabase Auth
+- **File Storage**: Supabase Storage
 
-## Project Structure
 
-Key directories:
-- app/: routes and page-level UI
-- components/: reusable UI and feature components
-- lib/: mock data, shared types, and local storage helpers
-- public/: static assets
-
-## Available Routes
-
-- /: home discovery page
-- /businesses: business listing page
-- /business/[id]: business details
-- /business/[id]/review: review submit flow
-- /categories/[category]: category listing
-- /favorites: saved businesses
-- /profile: user profile
-- /login: login screen
-- /signup: signup screen
-- /admin: admin dashboard
-
-## Local Development
-
-Prerequisites:
-- Node.js 20+
-- npm 10+
-
-Install dependencies:
-
-```bash
-npm install
-```
-
-Run the development server:
-
-```bash
-npm run dev
-```
-
-Build for production:
-
-```bash
-npm run build
-npm run start
-```
-
-Lint:
-
-```bash
-npm run lint
-```
-
-App runs at:
-
-http://localhost:3000
-
-## Authentication and Data Notes
-
-- Auth is mock/client-side and stored in local storage.
-- Any valid email + password length >= 6 works.
-- Admin role is granted when:
-	- email is admin@locallens.test, or
-	- email ends with @admin.local
-- Business and admin data currently come from local mock data files.
-- Favorites, profile, and pending user reviews are saved in browser local storage.
-
-## Important Files
-
-- app/ui/HomePage.tsx: home search/filter experience
-- components/AuthProvider.tsx: auth state and role logic
-- app/admin/page.tsx: admin dashboard
-- lib/mockData.ts: business/review seed data
-- lib/adminMockData.ts: admin seed data
-- lib/userStorage.ts: local storage helpers
-
-## Future Improvements
-
-- Replace mock auth with real authentication
-- Persist data via backend/database
-- Add server-side validation and moderation workflow
-- Add automated tests for critical flows
-
-## License
-
-No license file is currently configured for this repository.
+tly configured for this repository.
