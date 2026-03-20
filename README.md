@@ -32,9 +32,7 @@ It includes:
 
 - **Framework**: Next.js 16 
 - **Styling**: Tailwind CSS 4
-- **Database**: Supabase (PostgreSQL)
-- **Authentication**: Supabase Auth
-- **File Storage**: Supabase Storage
+
 
 
 
