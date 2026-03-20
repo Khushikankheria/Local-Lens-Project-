@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useAuth } from "../../components/AuthProvider";
 import { AdminReviewRow } from "../../components/AdminReviewRow";
 import { BusinessFormModal } from "../../components/BusinessFormModal";
 import { CategoryManagement } from "../../components/CategoryManagement";
@@ -26,10 +27,17 @@ function slugifyId(name: string) {
 }
 
 export default function AdminDashboardPage() {
+  const { state, login } = useAuth();
+
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<
     "overview" | "reviews" | "businesses" | "users" | "images" | "categories"
   >("overview");
+
+  const [email, setEmail] = useState("admin@locallens.test");
+  const [password, setPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   const [reviews, setReviews] = useState<AdminReview[]>(adminReviewsSeed);
   const [businesses, setBusinesses] = useState<Business[]>(adminBusinessesSeed);
@@ -146,6 +154,97 @@ export default function AdminDashboardPage() {
             }
           : c
       )
+    );
+  }
+
+  async function handleAdminLogin(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setAuthError(null);
+    setIsSubmitting(true);
+    try {
+      await login(email, password);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Unable to sign in right now.";
+      setAuthError(message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  const canAccessAdmin =
+    state.status === "authenticated" && state.user.role === "admin";
+
+  if (!canAccessAdmin) {
+    return (
+      <main className="bg-zinc-50">
+        <div className="mx-auto flex min-h-[70vh] max-w-7xl items-center justify-center px-4 py-10">
+          <section className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+            <h1 className="text-2xl font-bold tracking-tight text-zinc-950">
+              Admin Log in
+            </h1>
+            <p className="mt-2 text-sm text-zinc-600">
+              Enter admin credentials to open the dashboard.
+            </p>
+
+            <form onSubmit={handleAdminLogin} className="mt-6 space-y-4">
+              <div>
+                <label
+                  htmlFor="admin-email"
+                  className="mb-1 block text-sm font-medium text-zinc-800"
+                >
+                  Email
+                </label>
+                <input
+                  id="admin-email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="h-10 w-full rounded-lg border border-zinc-300 px-3 text-sm text-zinc-900 outline-none ring-zinc-900/20 placeholder:text-zinc-400 focus:border-zinc-900 focus:ring-4"
+                  placeholder="admin@locallens.test"
+                  required
+                  autoComplete="email"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="admin-password"
+                  className="mb-1 block text-sm font-medium text-zinc-800"
+                >
+                  Password
+                </label>
+                <input
+                  id="admin-password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="h-10 w-full rounded-lg border border-zinc-300 px-3 text-sm text-zinc-900 outline-none ring-zinc-900/20 placeholder:text-zinc-400 focus:border-zinc-900 focus:ring-4"
+                  placeholder="At least 6 characters"
+                  required
+                  autoComplete="current-password"
+                />
+              </div>
+
+              {state.status === "authenticated" && state.user.role !== "admin" && (
+                <p className="text-sm text-amber-700">
+                  Signed in as {state.user.email}. Use an admin email to continue.
+                </p>
+              )}
+
+              {authError && <p className="text-sm text-red-600">{authError}</p>}
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="inline-flex h-10 w-full items-center justify-center rounded-lg bg-zinc-900 px-4 text-sm font-medium text-white hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isSubmitting ? "Signing in..." : "Submit"}
+              </button>
+            </form>
+          </section>
+        </div>
+      </main>
     );
   }
 

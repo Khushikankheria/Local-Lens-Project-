@@ -19,31 +19,33 @@ export function StarRatingInput({
   const active = useMemo(() => (hover ?? value) || 0, [hover, value]);
 
   return (
-    <div className="flex items-center justify-between gap-3">
+    <div className="space-y-1.5">
       <div className="text-sm font-medium text-zinc-700">{label}</div>
-      <div className="flex items-center gap-1">
-        {Array.from({ length: 5 }).map((_, i) => {
-          const starValue = i + 1;
-          const isActive = active >= starValue;
-          return (
-            <button
-              key={starValue}
-              type="button"
-              onClick={() => onChange(starValue)}
-              onMouseEnter={() => setHover(starValue)}
-              onMouseLeave={() => setHover(null)}
-              className="rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
-              aria-label={`${label}: ${starValue} star${starValue === 1 ? "" : "s"}`}
-            >
-              <Star
-                width={px}
-                height={px}
-                className={isActive ? "text-amber-500" : "text-zinc-200"}
-              />
-            </button>
-          );
-        })}
-        <span className="ml-2 text-xs font-medium tabular-nums text-zinc-600">
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-1">
+          {Array.from({ length: 5 }).map((_, i) => {
+            const starValue = i + 1;
+            const isActive = active >= starValue;
+            return (
+              <button
+                key={starValue}
+                type="button"
+                onClick={() => onChange(starValue)}
+                onMouseEnter={() => setHover(starValue)}
+                onMouseLeave={() => setHover(null)}
+                className="rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                aria-label={`${label}: ${starValue} star${starValue === 1 ? "" : "s"}`}
+              >
+                <Star
+                  width={px}
+                  height={px}
+                  className={isActive ? "text-amber-500" : "text-zinc-200"}
+                />
+              </button>
+            );
+          })}
+        </div>
+        <span className="text-xs font-medium tabular-nums text-zinc-600">
           {value.toFixed(0)}/5
         </span>
       </div>
