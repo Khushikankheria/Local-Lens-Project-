@@ -37,4 +37,4 @@ It includes:
 - **File Storage**: Supabase Storage
 
 
-tly configured for this repository.
+
